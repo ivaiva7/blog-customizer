@@ -1,13 +1,13 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react'
 
-import { Text } from './Text';
+import { Text } from './Text'
 
 const meta: Meta<typeof Text> = {
 	component: Text,
-};
+}
 
-export default meta;
-type Story = StoryObj<typeof Text>;
+export default meta
+type Story = StoryObj<typeof Text>
 
 export const SelectStory: Story = {
 	argTypes: {
@@ -56,6 +56,6 @@ export const SelectStory: Story = {
 				Necessitatibus omnis sequi repudiandae, porro est possimus ullam
 				inventore dolores rem molestiae.
 			</Text>
-		);
+		)
 	},
-};
+}

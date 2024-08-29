@@ -1,31 +1,31 @@
-import { ElementType, ReactNode } from 'react';
-import { clsx } from 'clsx';
-import { FontFamiliesClasses } from 'src/constants/articleProps';
+import { ElementType, ReactNode } from 'react'
+import { clsx } from 'clsx'
+import { FontFamiliesClasses } from 'src/constants/articleProps'
 
-import styles from './index.module.scss';
+import styles from './index.module.scss'
 
 type TextProps = {
 	/** Сам текст для вывода */
-	children: ReactNode;
+	children: ReactNode
 	/** Тэг которым отрендерить текст */
-	as?: ElementType;
+	as?: ElementType
 	/** Булевая пропса, должен ли текст меняться в зависимости от конфига */
-	dynamic?: boolean;
+	dynamic?: boolean
 	/** Размер шрифта */
-	size?: 12 | 18 | 22 | 25 | 31 | 45;
+	size?: 12 | 18 | 22 | 25 | 31 | 45
 	/** Вес шрифта */
-	weight?: 400 | 800;
+	weight?: 400 | 800
 	/** Стиль шрифта */
-	fontStyle?: 'italic' | 'normal';
+	fontStyle?: 'italic' | 'normal'
 	/** Булевая пропса, отвечающая должен ли текст быть в верхнем регистре */
-	uppercase?: boolean;
+	uppercase?: boolean
 	/** Выравнивание текста */
-	align?: 'center' | 'left';
+	align?: 'center' | 'left'
 	/** font-family текста */
-	family?: FontFamiliesClasses;
+	family?: FontFamiliesClasses
 	/** Булевая пропса, делает динамическим только семью шрифтов и цвет */
-	dynamicLite?: boolean;
-};
+	dynamicLite?: boolean
+}
 
 export const Text = ({
 	children,
@@ -49,6 +49,6 @@ export const Text = ({
 		styles[`${align}`],
 		styles[`${family}`],
 		{ [styles.dynamicLite]: dynamicLite }
-	);
-	return <Tag className={className}>{children}</Tag>;
-};
+	)
+	return <Tag className={className}>{children}</Tag>
+}

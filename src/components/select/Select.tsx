@@ -1,50 +1,50 @@
-import { useState, useRef } from 'react';
-import type { MouseEventHandler } from 'react';
-import clsx from 'clsx';
-import { OptionType } from 'src/constants/articleProps';
-import { Text } from 'components/text';
-import arrowDown from 'src/images/arrow-down.svg';
-import { Option } from './Option';
-import { isFontFamilyClass } from './helpers/isFontFamilyClass';
-import { useEnterSubmit } from './hooks/useEnterSubmit';
-import { useOutsideClickClose } from './hooks/useOutsideClickClose';
+import { useState, useRef } from 'react'
+import type { MouseEventHandler } from 'react'
+import clsx from 'clsx'
+import { OptionType } from 'src/constants/articleProps'
+import { Text } from 'components/text'
+import arrowDown from 'src/images/arrow-down.svg'
+import { Option } from './Option'
+import { isFontFamilyClass } from './helpers/isFontFamilyClass'
+import { useEnterSubmit } from './hooks/useEnterSubmit'
+import { useOutsideClickClose } from './hooks/useOutsideClickClose'
 
-import styles from './Select.module.scss';
+import styles from './Select.module.scss'
 
 type SelectProps = {
-	selected: OptionType | null;
-	options: OptionType[];
-	placeholder?: string;
-	onChange?: (selected: OptionType) => void;
-	onClose?: () => void;
-	title?: string;
-};
+	selected: OptionType | null
+	options: OptionType[]
+	placeholder?: string
+	onChange?: (selected: OptionType) => void
+	onClose?: () => void
+	title?: string
+}
 
 export const Select = (props: SelectProps) => {
-	const { options, placeholder, selected, onChange, onClose, title } = props;
-	const [isOpen, setIsOpen] = useState<boolean>(false);
-	const rootRef = useRef<HTMLDivElement>(null);
-	const placeholderRef = useRef<HTMLDivElement>(null);
+	const { options, placeholder, selected, onChange, onClose, title } = props
+	const [isOpen, setIsOpen] = useState<boolean>(false)
+	const rootRef = useRef<HTMLDivElement>(null)
+	const placeholderRef = useRef<HTMLDivElement>(null)
 
 	useOutsideClickClose({
 		isOpen,
 		rootRef,
 		onClose,
 		onChange: setIsOpen,
-	});
+	})
 
 	useEnterSubmit({
 		placeholderRef,
 		onChange: setIsOpen,
-	});
+	})
 
 	const handleOptionClick = (option: OptionType) => {
-		setIsOpen(false);
-		onChange?.(option);
-	};
+		setIsOpen(false)
+		onChange?.(option)
+	}
 	const handlePlaceHolderClick: MouseEventHandler<HTMLDivElement> = () => {
-		setIsOpen((isOpen) => !isOpen);
-	};
+		setIsOpen((isOpen) => !isOpen)
+	}
 
 	return (
 		<div className={styles.container}>
@@ -59,7 +59,8 @@ export const Select = (props: SelectProps) => {
 				className={styles.selectWrapper}
 				ref={rootRef}
 				data-is-active={isOpen}
-				data-testid='selectWrapper'>
+				data-testid='selectWrapper'
+			>
 				<img
 					src={arrowDown}
 					alt='иконка стрелочки'
@@ -75,13 +76,15 @@ export const Select = (props: SelectProps) => {
 					onClick={handlePlaceHolderClick}
 					role='button'
 					tabIndex={0}
-					ref={placeholderRef}>
+					ref={placeholderRef}
+				>
 					<Text
 						family={
 							isFontFamilyClass(selected?.className)
 								? selected?.className
 								: undefined
-						}>
+						}
+					>
 						{selected?.title || placeholder}
 					</Text>
 				</div>
@@ -100,5 +103,5 @@ export const Select = (props: SelectProps) => {
 				)}
 			</div>
 		</div>
-	);
-};
+	)
+}
