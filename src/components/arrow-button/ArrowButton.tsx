@@ -1,24 +1,25 @@
-import arrow from 'src/images/arrow.svg'
-import styles from './ArrowButton.module.scss'
-import React from 'react'
+import arrow from 'src/images/arrow.svg';
+import styles from './ArrowButton.module.scss';
+import React from 'react';
+import clsx from 'clsx';
 
-/** Функция для обработки открытия/закрытия формы */
-export type OnClick = () => void
+
+export type OnClick = () => void;
 
 interface IArrowButtonProps {
-	onClick?: OnClick
-	isActive?: boolean
+	onClick?: OnClick;
+	isActive?: boolean;
 }
 
 export const ArrowButton = ({
-	onClick,
-	isActive = false,
-}: IArrowButtonProps) => {
+								onClick,
+								isActive = false,
+							}: IArrowButtonProps) => {
 	const handleClick = () => {
 		if (onClick) {
-			onClick()
+			onClick();
 		}
-	}
+	};
 
 	return (
 		<div
@@ -32,16 +33,20 @@ export const ArrowButton = ({
 			onClick={handleClick}
 			onKeyPress={(e) => {
 				if (e.key === 'Enter') {
-					handleClick()
+					handleClick();
 				}
 			}}
-			className={`${styles.container} ${isActive ? styles.container_open : ''}`}
+			className={clsx(styles.container, {
+				[styles.container_open]: isActive,
+			})}
 		>
 			<img
 				src={arrow}
 				alt='иконка стрелочки'
-				className={`${styles.arrow} ${isActive ? styles.arrow_open : ''}`}
+				className={clsx(styles.arrow, {
+					[styles.arrow_open]: isActive,
+				})}
 			/>
 		</div>
-	)
-}
+	);
+};

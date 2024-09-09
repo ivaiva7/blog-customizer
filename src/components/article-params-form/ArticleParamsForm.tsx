@@ -1,125 +1,102 @@
-import React, { useRef, useState, useEffect } from 'react'
-import { ArrowButton } from '../arrow-button'
-import { Button } from '../button'
-import { Text } from '../text'
-import { Select } from '../select'
-import { RadioGroup } from '../radio-group'
-import { Separator } from '../separator'
-import styles from './ArticleParamsForm.module.scss'
-import { OptionType } from 'src/constants/articleProps'
+import React, { useRef, useState } from 'react';
+import { ArrowButton } from '../arrow-button';
+import { Button } from '../button';
+import { Text } from '../text';
+import { Select } from '../select';
+import { RadioGroup } from '../radio-group';
+import { Separator } from '../separator';
+import styles from './ArticleParamsForm.module.scss';
+import { OptionType } from 'src/constants/articleProps';
+import { useClose } from 'src/hooks/useClose';
+import { defaultArticleState, ArticleStateType } from 'src/constants/articleProps';
+import {clsx} from "clsx";
 
 interface IArticleParamsFormProps {
-	visible: boolean
-	setVisible: (visible: boolean) => void
-	selectedFontFamily: OptionType
-	onSelectFontFamily: (option: OptionType) => void
-	selectedFontSize: OptionType
-	onSelectFontSize: (option: OptionType) => void
-	selectedFontColor: OptionType
-	onSelectFontColor: (option: OptionType) => void
-	selectedBackgroundColor: OptionType
-	onSelectBackgroundColor: (option: OptionType) => void
-	selectedContentWidth: OptionType
-	onSelectContentWidth: (option: OptionType) => void
-	fontFamilyOptions: OptionType[]
-	fontSizeOptions: OptionType[]
-	fontColorOptions: OptionType[]
-	backgroundColorOptions: OptionType[]
-	contentWidthOptions: OptionType[]
-	radioGroupName: string
-	onApplyChanges: (changes: {
-		fontFamily: OptionType
-		fontSize: OptionType
-		fontColor: OptionType
-		backgroundColor: OptionType
-		contentWidth: OptionType
-	}) => void
-	onReset: () => void
+	selectedFontFamily: OptionType;
+	onSelectFontFamily: (option: OptionType) => void;
+	selectedFontSize: OptionType;
+	onSelectFontSize: (option: OptionType) => void;
+	selectedFontColor: OptionType;
+	onSelectFontColor: (option: OptionType) => void;
+	selectedBackgroundColor: OptionType;
+	onSelectBackgroundColor: (option: OptionType) => void;
+	selectedContentWidth: OptionType;
+	onSelectContentWidth: (option: OptionType) => void;
+	fontFamilyOptions: OptionType[];
+	fontSizeOptions: OptionType[];
+	fontColorOptions: OptionType[];
+	backgroundColorOptions: OptionType[];
+	contentWidthOptions: OptionType[];
+	radioGroupName: string;
+	onApplyChanges: (changes: ArticleStateType) => void;
+	onReset: () => void;
+	defaultArticleState: ArticleStateType;
 }
 
 export const ArticleParamsForm = ({
-	visible,
-	setVisible,
-	selectedFontFamily,
-	onSelectFontFamily,
-	selectedFontSize,
-	onSelectFontSize,
-	selectedFontColor,
-	onSelectFontColor,
-	selectedBackgroundColor,
-	onSelectBackgroundColor,
-	selectedContentWidth,
-	onSelectContentWidth,
-	fontFamilyOptions,
-	fontSizeOptions,
-	fontColorOptions,
-	backgroundColorOptions,
-	contentWidthOptions,
-	radioGroupName,
-	onApplyChanges,
-	onReset,
-}: IArticleParamsFormProps) => {
-	const containerRef = useRef<HTMLDivElement | null>(null)
-	const [tempChanges, setTempChanges] = useState({
-		fontFamily: selectedFontFamily,
-		fontSize: selectedFontSize,
-		fontColor: selectedFontColor,
-		backgroundColor: selectedBackgroundColor,
-		contentWidth: selectedContentWidth,
-	})
+									  selectedFontFamily,
+									  onSelectFontFamily,
+									  selectedFontSize,
+									  onSelectFontSize,
+									  selectedFontColor,
+									  onSelectFontColor,
+									  selectedBackgroundColor,
+									  onSelectBackgroundColor,
+									  selectedContentWidth,
+									  onSelectContentWidth,
+									  fontFamilyOptions,
+									  fontSizeOptions,
+									  fontColorOptions,
+									  backgroundColorOptions,
+									  contentWidthOptions,
+									  radioGroupName,
+									  onApplyChanges,
+									  onReset,
+									  defaultArticleState,
+								  }: IArticleParamsFormProps) => {
+	const containerRef = useRef<HTMLDivElement | null>(null);
+	const [visible, setVisible] = useState<boolean>(false)
+	const [tempChanges, setTempChanges] = useState(defaultArticleState);
 
-	const handleApply = () => {
-		onApplyChanges(tempChanges)
-	}
+	const handleSubmit = () => {
+		onApplyChanges(tempChanges);
+	};
+
+	const handleReset = () => {
+		setTempChanges(defaultArticleState);
+		onReset();
+	};
 
 	const handleClose = () => {
-		setVisible(false)
-	}
+		setVisible(false);
+	};
 
 	const handleFormClick = (event: React.MouseEvent<HTMLFormElement>) => {
-		event.stopPropagation()
-	}
+		event.stopPropagation();
+	};
 
-	useEffect(() => {
-		const handleKeyDown = (event: KeyboardEvent) => {
-			if (event.key === 'Escape') {
-				handleClose()
-			}
-		}
-		const handleClickOutside = (event: MouseEvent) => {
-			if (
-				containerRef.current &&
-				!containerRef.current.contains(event.target as Node)
-			) {
-				handleClose()
-			}
-		}
+	useClose({
+		isOpen: visible,
+		onClose: handleClose,
+		rootRef: containerRef,
+	});
 
-		if (visible) {
-			document.addEventListener('mousedown', handleClickOutside)
-			document.addEventListener('keydown', handleKeyDown)
-		}
-
-		return () => {
-			document.removeEventListener('mousedown', handleClickOutside)
-			document.removeEventListener('keydown', handleKeyDown)
-		}
-	}, [visible])
-
-	const containerClasses = [styles.container]
-	if (visible) {
-		containerClasses.push(styles.container_open)
-	}
+	const containerClasses = clsx(styles.container, {
+		[styles.container_open]: visible,
+	});
 
 	return (
 		<>
 			<ArrowButton onClick={() => setVisible(!visible)} isActive={visible} />
 			<aside
-				className={containerClasses.join(' ')}
+				className={containerClasses}
 				ref={containerRef}
 				onClick={handleClose}
 			>
-				<form className={styles.form} onClick={handleFormClick}>
+				<form className={styles.form} onClick={handleFormClick} onSubmit={(e) => {
+					e.preventDefault();
+					handleSubmit();
+				}}>
 					<Text as='h1' size={31} weight={800} uppercase dynamicLite>
 						Задайте параметры
 					</Text>
@@ -128,9 +105,9 @@ export const ArticleParamsForm = ({
 						title='Шрифт'
 						options={fontFamilyOptions}
 						placeholder='Выберите опцию'
-						selected={tempChanges.fontFamily}
+						selected={tempChanges.fontFamilyOption}
 						onChange={(option) =>
-							setTempChanges({ ...tempChanges, fontFamily: option })
+							setTempChanges({ ...tempChanges, fontFamilyOption: option })
 						}
 					/>
 					<div style={{ paddingTop: '50px' }}></div>
@@ -138,9 +115,9 @@ export const ArticleParamsForm = ({
 						name={radioGroupName}
 						title='Размер шрифта'
 						options={fontSizeOptions}
-						selected={tempChanges.fontSize}
+						selected={tempChanges.fontSizeOption}
 						onChange={(option) =>
-							setTempChanges({ ...tempChanges, fontSize: option })
+							setTempChanges({ ...tempChanges, fontSizeOption: option })
 						}
 					/>
 					<div style={{ paddingTop: '50px' }}></div>
@@ -176,11 +153,11 @@ export const ArticleParamsForm = ({
 						}
 					/>
 					<div className={styles.bottomContainer}>
-						<Button title='Сбросить' type='reset' onClick={onReset} />
-						<Button title='Применить' type='button' onClick={handleApply} />
+						<Button title='Сбросить' type='reset' onClick={handleReset} />
+						<Button title='Применить' type='submit' />
 					</div>
 				</form>
 			</aside>
 		</>
-	)
-}
+	);
+};
