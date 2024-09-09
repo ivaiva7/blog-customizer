@@ -1,36 +1,36 @@
-import { useRef } from 'react';
-import type { MouseEventHandler } from 'react';
-import clsx from 'clsx';
-import { OptionType } from 'src/constants/articleProps';
-import { Text } from 'components/text';
-import { isFontFamilyClass } from './helpers/isFontFamilyClass';
-import { useEnterOptionSubmit } from './hooks/useEnterOptionSubmit';
+import { useRef } from 'react'
+import type { MouseEventHandler } from 'react'
+import clsx from 'clsx'
+import { OptionType } from 'src/constants/articleProps'
+import { Text } from 'components/text'
+import { isFontFamilyClass } from './helpers/isFontFamilyClass'
+import { useEnterOptionSubmit } from './hooks/useEnterOptionSubmit'
 
-import styles from './Select.module.scss';
+import styles from './Select.module.scss'
 
 type OptionProps = {
-	option: OptionType;
-	onClick: (value: OptionType['value']) => void;
-};
+	option: OptionType
+	onClick: (value: OptionType['value']) => void
+}
 
 export const Option = (props: OptionProps) => {
 	const {
 		option: { value, title, optionClassName, className },
 		onClick,
-	} = props;
-	const optionRef = useRef<HTMLLIElement>(null);
+	} = props
+	const optionRef = useRef<HTMLLIElement>(null)
 
 	const handleClick =
 		(clickedValue: OptionType['value']): MouseEventHandler<HTMLLIElement> =>
 		() => {
-			onClick(clickedValue);
-		};
+			onClick(clickedValue)
+		}
 
 	useEnterOptionSubmit({
 		optionRef,
 		value,
 		onClick,
-	});
+	})
 
 	return (
 		<li
@@ -39,10 +39,11 @@ export const Option = (props: OptionProps) => {
 			onClick={handleClick(value)}
 			tabIndex={0}
 			data-testid={`select-option-${value}`}
-			ref={optionRef}>
+			ref={optionRef}
+		>
 			<Text family={isFontFamilyClass(className) ? className : undefined}>
 				{title}
 			</Text>
 		</li>
-	);
-};
+	)
+}

@@ -1,15 +1,15 @@
-import { Text } from 'components/text';
+import { Text } from 'components/text'
 
-import styles from './Button.module.scss';
+import styles from './Button.module.scss'
 
 export const Button = ({
 	title,
 	onClick,
 	type,
 }: {
-	title: string;
-	onClick?: () => void;
-	type?: React.ButtonHTMLAttributes<HTMLButtonElement>['type'];
+	title?: string
+	onClick?: () => void
+	type?: React.ButtonHTMLAttributes<HTMLButtonElement>['type']
 }) => {
 	return (
 		<button className={styles.button} type={type} onClick={onClick}>
@@ -17,5 +17,5 @@ export const Button = ({
 				{title}
 			</Text>
 		</button>
-	);
-};
+	)
+}
